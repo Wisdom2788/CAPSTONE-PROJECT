@@ -1,0 +1,115 @@
+@startuml YouthGuard_Activity_Messaging
+!theme plain
+title YouthGuard MVP - Messaging System Activity Diagram
+
+|User (Sender)|
+start
+:Login to App;
+:Navigate to Messages;
+:View Conversation List;
+
+if (Start New Conversation?) then (yes)
+  :Click "New Message";
+  :Search for Recipient|
+  note right
+    - Search by name
+    - Search by role
+    - Browse contacts
+  end note
+  
+  |System|
+  :Display Search Results;
+  :Filter by User Type;
+  
+  |User (Sender)|
+  :Select Recipient;
+  
+  |System|
+  :Open New Conversation;
+  :Create Chat Interface;
+else (no)
+  :Select Existing Conversation;
+  
+  |System|
+  :Load Conversation History;
+  :Mark Messages as Read;
+  :Update Last Seen Status;
+endif
+
+|User (Sender)|
+:Type Message;
+if (Add Attachment?) then (yes)
+  :Select File/Image;
+  
+  |System|
+  :Validate File Type;
+  :Check File Size;
+  if (File Valid?) then (yes)
+    :Upload to Storage;
+    :Generate File URL;
+  else (no)
+    :Display Error Message;
+    stop
+  endif
+else (no)
+endif
+
+|User (Sender)|
+:Click Send;
+
+|System|
+:Validate Message Content;
+:Check Spam/Inappropriate Content;
+if (Content Appropriate?) then (yes)
+  :Save Message to Database;
+  :Update Conversation Timestamp;
+  :Send Real-time Notification;
+  
+  |User (Recipient)|
+  if (Online?) then (yes)
+    :Receive Real-time Notification;
+    :See New Message Indicator;
+    if (In Conversation?) then (yes)
+      :Display Message Immediately;
+      :Auto-mark as Read;
+    else (no)
+      :Show Badge Notification;
+      :Update Message Counter;
+    endif
+  else (no)
+    :Queue Push Notification;
+    
+    |System|
+    :Send Push Notification;
+    :Update Unread Count;
+  endif
+  
+  |User (Recipient)|
+  :Open Message;
+  
+  |System|
+  :Mark as Read;
+  :Update Read Status;
+  :Send Read Receipt;
+  
+  |User (Sender)|
+  :See Read Receipt;
+  
+  if (Reply Needed?) then (yes)
+    |User (Recipient)|
+    :Type Reply;
+    :Send Response;
+    
+    |System|
+    :Process Reply;
+    note right: Same process as above
+  else (no)
+    stop
+  endif
+else (no)
+  :Display "Message Blocked";
+  :Log Inappropriate Content;
+  stop
+endif
+
+@enduml

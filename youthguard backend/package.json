@@ -1,0 +1,55 @@
+{
+  "name": "youthguard-backend",
+  "version": "1.0.0",
+  "description": "YouthGuard MVP Backend API - Reducing youth involvement in fraud and cybercrime in Nigeria",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest tests/integration"
+  },
+  "keywords": [
+    "youth-empowerment",
+    "cybercrime-prevention",
+    "education",
+    "job-marketplace",
+    "mentorship",
+    "nigeria",
+    "api",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "YouthGuard Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.9",
+    "socket.io": "^4.8.1",
+    "uuid": "^13.0.0",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "jest": "^30.2.0",
+    "jest-extended": "^6.0.0",
+    "jest-junit": "^16.0.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
+  }
+}

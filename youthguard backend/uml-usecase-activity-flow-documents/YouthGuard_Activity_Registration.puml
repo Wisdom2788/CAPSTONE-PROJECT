@@ -1,0 +1,69 @@
+@startuml YouthGuard_Activity_UserRegistration
+!theme plain
+title YouthGuard MVP - User Registration Activity Diagram
+
+|User|
+start
+:Open YouthGuard App;
+:Select "Register";
+:Choose User Type|
+split
+  :Youth Registration;
+split again
+  :Mentor Registration;
+split again
+  :Employer Registration;
+end split
+
+|System|
+:Display Registration Form;
+
+|User|
+:Fill Personal Information;
+:Enter Email & Password;
+:Agree to Terms & Conditions;
+
+|System|
+:Validate Input Data;
+if (Data Valid?) then (yes)
+  :Check Email Uniqueness;
+  if (Email Available?) then (yes)
+    :Hash Password;
+    :Create User Account;
+    :Send Verification Email;
+    :Display Success Message;
+    
+    |User|
+    :Check Email;
+    :Click Verification Link;
+    
+    |System|
+    :Verify Email Token;
+    if (Token Valid?) then (yes)
+      :Activate Account;
+      :Redirect to Profile Setup;
+      
+      |User|
+      :Complete Profile Setup;
+      :Upload Profile Picture;
+      :Set Preferences;
+      
+      |System|
+      :Save Profile Data;
+      :Create Welcome Tutorial;
+      :Send Welcome Message;
+      stop
+    else (no)
+      :Display "Invalid Token";
+      stop
+    endif
+  else (no)
+    :Display "Email Already Exists";
+    stop
+  endif
+else (no)
+  :Display Validation Errors;
+  stop
+endif
+
+@enduml

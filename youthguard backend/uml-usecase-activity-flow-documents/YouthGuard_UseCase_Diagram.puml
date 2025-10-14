@@ -1,0 +1,125 @@
+@startuml YouthGuard_UseCase_Diagram
+!theme plain
+title YouthGuard MVP - Use Case Diagram
+
+' Define actors
+actor "Youth" as youth
+actor "Mentor" as mentor
+actor "Employer" as employer
+actor "Administrator" as admin
+actor "Content Creator" as creator
+
+' Define system boundary
+package "YouthGuard MVP System" {
+    
+    ' Authentication & Profile Management
+    usecase "Register Account" as UC1
+    usecase "Login/Logout" as UC2
+    usecase "Manage Profile" as UC3
+    usecase "Reset Password" as UC4
+    
+    ' Learning Management
+    usecase "Browse Courses" as UC5
+    usecase "Enroll in Course" as UC6
+    usecase "Take Lessons" as UC7
+    usecase "Submit Assignments" as UC8
+    usecase "Track Progress" as UC9
+    usecase "Download Certificate" as UC10
+    
+    ' Job Marketplace
+    usecase "Browse Jobs" as UC11
+    usecase "Apply for Job" as UC12
+    usecase "Post Job" as UC13
+    usecase "Manage Job Applications" as UC14
+    usecase "Search Candidates" as UC15
+    
+    ' Communication
+    usecase "Send Message" as UC16
+    usecase "Receive Message" as UC17
+    usecase "Join Discussion" as UC18
+    
+    ' Mentorship
+    usecase "Request Mentorship" as UC19
+    usecase "Provide Mentorship" as UC20
+    usecase "Schedule Session" as UC21
+    
+    ' Content Management
+    usecase "Create Course Content" as UC22
+    usecase "Update Course Material" as UC23
+    usecase "Moderate Content" as UC24
+    
+    ' System Administration
+    usecase "Manage Users" as UC25
+    usecase "View Analytics" as UC26
+    usecase "Configure System" as UC27
+    usecase "Generate Reports" as UC28
+}
+
+' Youth relationships
+youth --> UC1
+youth --> UC2
+youth --> UC3
+youth --> UC4
+youth --> UC5
+youth --> UC6
+youth --> UC7
+youth --> UC8
+youth --> UC9
+youth --> UC10
+youth --> UC11
+youth --> UC12
+youth --> UC16
+youth --> UC17
+youth --> UC18
+youth --> UC19
+
+' Mentor relationships
+mentor --> UC2
+mentor --> UC3
+mentor --> UC16
+mentor --> UC17
+mentor --> UC18
+mentor --> UC20
+mentor --> UC21
+
+' Employer relationships
+employer --> UC2
+employer --> UC3
+employer --> UC11
+employer --> UC13
+employer --> UC14
+employer --> UC15
+employer --> UC16
+employer --> UC17
+
+' Content Creator relationships
+creator --> UC2
+creator --> UC3
+creator --> UC22
+creator --> UC23
+
+' Administrator relationships
+admin --> UC2
+admin --> UC24
+admin --> UC25
+admin --> UC26
+admin --> UC27
+admin --> UC28
+
+' Include relationships
+UC6 .> UC2 : <<include>>
+UC7 .> UC6 : <<include>>
+UC8 .> UC7 : <<include>>
+UC10 .> UC9 : <<include>>
+UC12 .> UC2 : <<include>>
+UC13 .> UC2 : <<include>>
+UC16 .> UC2 : <<include>>
+UC19 .> UC2 : <<include>>
+UC20 .> UC2 : <<include>>
+
+' Extend relationships
+UC4 .> UC2 : <<extend>>
+UC21 .> UC20 : <<extend>>
+UC15 .> UC11 : <<extend>>
+
+@enduml

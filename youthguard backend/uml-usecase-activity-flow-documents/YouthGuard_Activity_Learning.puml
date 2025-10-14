@@ -1,0 +1,105 @@
+@startuml YouthGuard_Activity_CourseEnrollment
+!theme plain
+title YouthGuard MVP - Course Enrollment & Learning Activity Diagram
+
+|Youth|
+start
+:Login to App;
+:Browse Available Courses;
+:Filter by Category/Difficulty;
+:Select Course of Interest;
+
+|System|
+:Display Course Details;
+:Show Prerequisites;
+:Display Instructor Info;
+:Show Course Rating;
+
+|Youth|
+if (Prerequisites Met?) then (yes)
+  :Click "Enroll Now";
+  
+  |System|
+  :Check User Authentication;
+  if (User Logged In?) then (yes)
+    :Check Course Capacity;
+    if (Seats Available?) then (yes)
+      :Create Enrollment Record;
+      :Update Course Statistics;
+      :Add Course to User Dashboard;
+      :Send Enrollment Confirmation;
+      
+      |Youth|
+      :Receive Confirmation;
+      :Access Course Materials;
+      
+      repeat
+        |Youth|
+        :Select Next Lesson;
+        
+        |System|
+        :Load Lesson Content;
+        :Track Start Time;
+        
+        |Youth|
+        :Watch Video/Read Content;
+        :Take Notes;
+        :Complete Exercises;
+        
+        |System|
+        :Record Progress;
+        :Update Completion Status;
+        
+        |Youth|
+        if (Lesson has Quiz?) then (yes)
+          :Take Quiz;
+          
+          |System|
+          :Evaluate Quiz;
+          :Calculate Score;
+          if (Score >= 70%?) then (yes)
+            :Mark Lesson Complete;
+            :Unlock Next Lesson;
+          else (no)
+            :Mark as Needs Review;
+            :Suggest Additional Resources;
+          endif
+        else (no)
+          :Mark Lesson Complete;
+        endif
+        
+      repeat while (More Lessons?) is (yes)
+      
+      |System|
+      :Calculate Course Completion;
+      if (All Lessons Complete?) then (yes)
+        :Generate Certificate;
+        :Update User Profile;
+        :Send Congratulations;
+        :Recommend Next Courses;
+        
+        |Youth|
+        :Download Certificate;
+        :Share Achievement;
+        stop
+      else (no)
+        :Continue Learning;
+        stop
+      endif
+      
+    else (no)
+      :Display "Course Full";
+      :Suggest Similar Courses;
+      stop
+    endif
+  else (no)
+    :Redirect to Login;
+    stop
+  endif
+else (no)
+  :Display Prerequisites;
+  :Suggest Foundation Courses;
+  stop
+endif
+
+@enduml

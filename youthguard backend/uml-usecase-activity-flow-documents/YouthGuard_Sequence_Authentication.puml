@@ -1,0 +1,68 @@
+@startuml YouthGuard_Sequence_Authentication
+!theme plain
+title YouthGuard MVP - Authentication Sequence Diagram
+
+participant "Mobile App" as App
+participant "Authentication Service" as Auth
+participant "Database" as DB
+participant "Email Service" as Email
+
+== User Registration ==
+App -> Auth: POST /api/auth/register\n{email, password, userType, profile}
+Auth -> Auth: validateInputData()
+Auth -> DB: checkEmailExists(email)
+DB --> Auth: emailExists: false
+Auth -> Auth: hashPassword(password)
+Auth -> DB: createUser(userData)
+DB --> Auth: userId
+Auth -> Auth: generateVerificationToken()
+Auth -> Email: sendVerificationEmail(email, token)
+Email --> Auth: emailSent: true
+Auth --> App: {success: true, message: "Check email"}
+
+== Email Verification ==
+App -> Auth: GET /api/auth/verify?token=xyz
+Auth -> DB: validateToken(token)
+DB --> Auth: tokenValid: true, userId
+Auth -> DB: activateUser(userId)
+DB --> Auth: userActivated: true
+Auth --> App: {success: true, redirect: "/profile-setup"}
+
+== User Login ==
+App -> Auth: POST /api/auth/login\n{email, password}
+Auth -> DB: getUserByEmail(email)
+DB --> Auth: userData
+Auth -> Auth: verifyPassword(password, hashedPassword)
+Auth -> Auth: generateJWTToken(userId, role)
+Auth -> DB: updateLastLogin(userId)
+Auth --> App: {token, user: {id, name, role}, expiresIn}
+
+== Protected Route Access ==
+App -> Auth: GET /api/courses\nAuthorization: Bearer token
+Auth -> Auth: validateJWTToken(token)
+alt Token Valid
+    Auth -> DB: getUserPermissions(userId)
+    DB --> Auth: permissions
+    Auth --> App: {courses: [...]}
+else Token Invalid
+    Auth --> App: {error: "Unauthorized", status: 401}
+end
+
+== Password Reset ==
+App -> Auth: POST /api/auth/forgot-password\n{email}
+Auth -> DB: getUserByEmail(email)
+DB --> Auth: userData
+Auth -> Auth: generateResetToken()
+Auth -> DB: saveResetToken(userId, token)
+Auth -> Email: sendResetEmail(email, token)
+Auth --> App: {success: true, message: "Reset email sent"}
+
+App -> Auth: POST /api/auth/reset-password\n{token, newPassword}
+Auth -> DB: validateResetToken(token)
+DB --> Auth: tokenValid: true, userId
+Auth -> Auth: hashPassword(newPassword)
+Auth -> DB: updatePassword(userId, hashedPassword)
+Auth -> DB: invalidateResetToken(token)
+Auth --> App: {success: true, message: "Password updated"}
+
+@enduml

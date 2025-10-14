@@ -1,0 +1,302 @@
+@startuml YouthGuard_Class_Diagram
+!theme plain
+title YouthGuard MVP - Class Diagram
+
+' Abstract User class
+abstract class User {
+    # userId: String
+    # email: String
+    # password: String
+    # firstName: String
+    # lastName: String
+    # phoneNumber: String
+    # profilePicture: String
+    # dateCreated: Date
+    # lastLogin: Date
+    # isActive: Boolean
+    # location: String
+    --
+    + register(): Boolean
+    + login(email: String, password: String): Boolean
+    + logout(): Boolean
+    + updateProfile(data: Object): Boolean
+    + resetPassword(email: String): Boolean
+    + uploadProfilePicture(file: File): Boolean
+    + deactivateAccount(): Boolean
+    {abstract} + getRole(): String
+}
+
+' Youth class (inherits User)
+class Youth {
+    - educationLevel: String
+    - skills: List<Skill>
+    - interests: List<String>
+    - employmentStatus: String
+    - experience: String
+    - portfolio: String
+    - totalCoursesCompleted: Integer
+    - totalCertificates: Integer
+    --
+    + getRole(): String
+    + enrollInCourse(courseId: String): Boolean
+    + applyForJob(jobId: String): Boolean
+    + updateSkills(skills: List<Skill>): Boolean
+    + requestMentorship(mentorId: String): Boolean
+    + getProgress(): List<Progress>
+    + getCertificates(): List<Certificate>
+    + calculateCompletionRate(): Float
+}
+
+' Mentor class (inherits User)
+class Mentor {
+    - expertise: List<String>
+    - yearsOfExperience: Integer
+    - company: String
+    - jobTitle: String
+    - menteeLimit: Integer
+    - currentMentees: Integer
+    - rating: Float
+    - totalSessions: Integer
+    --
+    + getRole(): String
+    + acceptMentorshipRequest(youthId: String): Boolean
+    + scheduleMentorshipSession(youthId: String, date: Date): Boolean
+    + provideFeedback(youthId: String, feedback: String): Boolean
+    + updateExpertise(expertise: List<String>): Boolean
+    + isAvailable(): Boolean
+    + getMentees(): List<Youth>
+}
+
+' Employer class (inherits User)
+class Employer {
+    - companyName: String
+    - industry: String
+    - companySize: String
+    - website: String
+    - companyDescription: String
+    - verificationStatus: Boolean
+    - jobsPosted: Integer
+    --
+    + getRole(): String
+    + postJob(jobData: Object): Boolean
+    + searchCandidates(criteria: Object): List<Youth>
+    + reviewApplication(applicationId: String): Boolean
+    + updateCompanyProfile(data: Object): Boolean
+    + getPostedJobs(): List<Job>
+    + manageApplications(): List<Application>
+}
+
+' Administrator class (inherits User)
+class Administrator {
+    - permissions: List<String>
+    - department: String
+    - accessLevel: String
+    --
+    + getRole(): String
+    + manageUsers(): Boolean
+    + moderateContent(): Boolean
+    + generateReports(): Object
+    + configureSystem(settings: Object): Boolean
+    + viewAnalytics(): Object
+    + banUser(userId: String, reason: String): Boolean
+}
+
+' Course class
+class Course {
+    - courseId: String
+    - title: String
+    - description: String
+    - category: Category
+    - instructor: String
+    - duration: Integer
+    - difficulty: String
+    - prerequistes: List<String>
+    - syllabus: String
+    - thumbnail: String
+    - price: Float
+    - enrollmentCount: Integer
+    - rating: Float
+    - isActive: Boolean
+    - createdDate: Date
+    --
+    + createCourse(data: Object): Boolean
+    + updateContent(content: String): Boolean
+    + addLesson(lesson: Lesson): Boolean
+    + removeLesson(lessonId: String): Boolean
+    + getLessons(): List<Lesson>
+    + getEnrolledStudents(): List<Youth>
+    + calculateCompletionRate(): Float
+    + updateRating(rating: Float): Boolean
+}
+
+' Lesson class
+class Lesson {
+    - lessonId: String
+    - courseId: String
+    - title: String
+    - content: String
+    - videoUrl: String
+    - materials: List<String>
+    - duration: Integer
+    - orderIndex: Integer
+    - isPreview: Boolean
+    - quiz: Object
+    --
+    + createLesson(data: Object): Boolean
+    + updateContent(content: String): Boolean
+    + addMaterial(material: String): Boolean
+    + removeMaterial(materialId: String): Boolean
+    + markAsCompleted(youthId: String): Boolean
+    + getQuizResults(youthId: String): Object
+}
+
+' Job class
+class Job {
+    - jobId: String
+    - employerId: String
+    - title: String
+    - description: String
+    - company: String
+    - location: String
+    - jobType: String
+    - salaryMin: Float
+    - salaryMax: Float
+    - requirements: List<String>
+    - skills: List<Skill>
+    - applicationDeadline: Date
+    - isActive: Boolean
+    - postedDate: Date
+    - applicationsCount: Integer
+    --
+    + createJob(data: Object): Boolean
+    + updateJob(data: Object): Boolean
+    + deactivateJob(): Boolean
+    + getApplications(): List<Application>
+    + matchCandidates(): List<Youth>
+    + extendDeadline(newDate: Date): Boolean
+}
+
+' Application class
+class Application {
+    - applicationId: String
+    - jobId: String
+    - youthId: String
+    - coverLetter: String
+    - resume: String
+    - status: String
+    - appliedDate: Date
+    - reviewedDate: Date
+    - feedback: String
+    --
+    + submitApplication(data: Object): Boolean
+    + updateStatus(status: String): Boolean
+    + addFeedback(feedback: String): Boolean
+    + withdraw(): Boolean
+    + getApplicationDetails(): Object
+}
+
+' Message class
+class Message {
+    - messageId: String
+    - senderId: String
+    - receiverId: String
+    - content: String
+    - messageType: String
+    - timestamp: Date
+    - isRead: Boolean
+    - attachments: List<String>
+    --
+    + sendMessage(data: Object): Boolean
+    + markAsRead(): Boolean
+    + deleteMessage(): Boolean
+    + addAttachment(file: File): Boolean
+    + editMessage(newContent: String): Boolean
+}
+
+' Progress class
+class Progress {
+    - progressId: String
+    - youthId: String
+    - courseId: String
+    - lessonId: String
+    - completionStatus: String
+    - completedDate: Date
+    - timeSpent: Integer
+    - attempts: Integer
+    - score: Float
+    --
+    + updateProgress(status: String): Boolean
+    + recordTimeSpent(time: Integer): Boolean
+    + incrementAttempts(): Boolean
+    + updateScore(score: Float): Boolean
+    + getCompletionPercentage(): Float
+}
+
+' Certificate class
+class Certificate {
+    - certificateId: String
+    - youthId: String
+    - courseId: String
+    - issueDate: Date
+    - certificateUrl: String
+    - verificationCode: String
+    - isValid: Boolean
+    --
+    + generateCertificate(): Boolean
+    + verifyCertificate(code: String): Boolean
+    + downloadCertificate(): File
+    + invalidateCertificate(): Boolean
+}
+
+' Skill class
+class Skill {
+    - skillId: String
+    - name: String
+    - category: String
+    - description: String
+    - level: String
+    --
+    + createSkill(data: Object): Boolean
+    + updateSkill(data: Object): Boolean
+    + deleteSkill(): Boolean
+}
+
+' Category class
+class Category {
+    - categoryId: String
+    - name: String
+    - description: String
+    - icon: String
+    - courseCount: Integer
+    --
+    + createCategory(data: Object): Boolean
+    + updateCategory(data: Object): Boolean
+    + getCourses(): List<Course>
+    + deleteCategory(): Boolean
+}
+
+' Relationships
+User <|-- Youth
+User <|-- Mentor
+User <|-- Employer
+User <|-- Administrator
+
+Youth ||--o{ Progress : "tracks"
+Youth ||--o{ Application : "submits"
+Youth ||--o{ Certificate : "earns"
+Youth }o--|| Mentor : "mentored by"
+
+Course ||--o{ Lesson : "contains"
+Course ||--o{ Progress : "tracked in"
+Course ||--o{ Certificate : "awards"
+Course }o--|| Category : "belongs to"
+
+Job ||--o{ Application : "receives"
+Employer ||--o{ Job : "posts"
+
+User ||--o{ Message : "sends/receives"
+
+Skill }o--o{ Youth : "has"
+Skill }o--o{ Job : "requires"
+
+@enduml
