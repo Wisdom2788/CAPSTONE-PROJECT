@@ -26,8 +26,8 @@ class ApplicationController extends BaseController {
     /**
      * Constructor
      */
-    constructor() {
-        super(new ApplicationService());
+    constructor(applicationService) {
+        super(applicationService);
     }
     
     /**

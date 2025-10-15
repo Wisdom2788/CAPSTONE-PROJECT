@@ -15,7 +15,17 @@
 const express = require('express');
 const router = express.Router();
 
-// Import controllers (they will be initialized with DI)
+// Import Services
+const UserService = require('../services/UserService');
+const YouthService = require('../services/YouthService');
+const CourseService = require('../services/CourseService');
+const JobService = require('../services/JobService');
+const ApplicationService = require('../services/ApplicationService');
+const ProgressService = require('../services/ProgressService');
+const MessageService = require('../services/MessageService');
+const ConversationService = require('../services/ConversationService');
+
+// Import Controllers
 const UserController = require('../controllers/UserController');
 const YouthController = require('../controllers/YouthController');
 const CourseController = require('../controllers/CourseController');
@@ -28,55 +38,42 @@ const ConversationController = require('../controllers/ConversationController');
 // Import middleware
 const authMiddleware = require('../middleware/auth');
 const adminMiddleware = require('../middleware/admin');
-const validateMiddleware = require('../middleware/validate');
 
-// Controllers will be initialized with dependency injection in the app configuration
+// Instantiate Services
+const userService = new UserService();
+const youthService = new YouthService();
+const courseService = new CourseService();
+const jobService = new JobService();
+const applicationService = new ApplicationService();
+const progressService = new ProgressService();
+const messageService = new MessageService();
+const conversationService = new ConversationService();
+
+// Instantiate Controllers
+const userController = new UserController(userService);
+const youthController = new YouthController(youthService);
+const courseController = new CourseController(courseService);
+const jobController = new JobController(jobService);
+const applicationController = new ApplicationController(applicationService);
+const progressController = new ProgressController(progressService);
+const messageController = new MessageController(messageService);
+const conversationController = new ConversationController(conversationService);
 
 /**
  * Authentication Routes
  */
-router.post('/auth/register', (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.register(req, res, next);
-});
-
-router.post('/auth/login', (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.login(req, res, next);
-});
+router.post('/auth/register', userController.register.bind(userController));
+router.post('/auth/login', userController.login.bind(userController));
 
 /**
  * User Routes
  */
-router.get('/users/profile', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.getProfile(req, res, next);
-});
-
-router.put('/users/profile', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.updateProfile(req, res, next);
-});
-
-router.put('/users/password', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.changePassword(req, res, next);
-});
-
-router.post('/users/verify-email', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.verifyEmail(req, res, next);
-});
-
-router.get('/users/search', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.searchUsers(req, res, next);
-});
-
-router.get('/users/statistics', authMiddleware, (req, res, next) => {
-    const userController = req.app.get('container').resolve('UserController');
-    userController.getStatistics(req, res, next);
-});
+router.get('/users/profile', authMiddleware, userController.getProfile.bind(userController));
+router.put('/users/profile', authMiddleware, userController.updateProfile.bind(userController));
+router.put('/users/password', authMiddleware, userController.changePassword.bind(userController));
+router.post('/users/verify-email', authMiddleware, userController.verifyEmail.bind(userController));
+router.get('/users/search', authMiddleware, userController.searchUsers.bind(userController));
+router.get('/users/statistics', authMiddleware, userController.getStatistics.bind(userController));
 
 /**
  * Youth Routes
@@ -98,29 +95,36 @@ router.get('/youth/statistics', authMiddleware, youthController.getStatistics.bi
  * Course Routes
  */
 router.post('/courses', authMiddleware, courseController.createCourse.bind(courseController));
-router.get('/courses/:id', authMiddleware, courseController.getCourse.bind(courseController));
+router.get('/courses', authMiddleware, courseController.getAllCourses.bind(courseController));
+router.get('/courses/:id', authMiddleware, courseController.getCourseById.bind(courseController));
 router.put('/courses/:id', authMiddleware, courseController.updateCourse.bind(courseController));
-router.post('/courses/:id/publish', authMiddleware, courseController.publishCourse.bind(courseController));
+router.delete('/courses/:id', authMiddleware, courseController.deleteCourse.bind(courseController));
 router.post('/courses/:id/lessons', authMiddleware, courseController.addLesson.bind(courseController));
-router.delete('/courses/:id/lessons/:lessonId', authMiddleware, courseController.removeLesson.bind(courseController));
-router.post('/courses/:id/enroll', authMiddleware, courseController.enrollUser.bind(courseController));
-router.post('/courses/:id/unenroll', authMiddleware, courseController.unenrollUser.bind(courseController));
-router.post('/courses/:id/rating', authMiddleware, courseController.addRating.bind(courseController));
-router.get('/courses/search', authMiddleware, courseController.searchCourses.bind(courseController));
-router.get('/courses/statistics', authMiddleware, courseController.getStatistics.bind(courseController));
+router.get('/courses/:courseId/lessons', authMiddleware, courseController.getLessonsForCourse.bind(courseController));
+// router.post('/courses/:id/publish', authMiddleware, courseController.publishCourse.bind(courseController));
+// router.delete('/courses/:id/lessons/:lessonId', authMiddleware, courseController.removeLesson.bind(courseController));
+// router.post('/courses/:id/enroll', authMiddleware, courseController.enrollUser.bind(courseController));
+// router.post('/courses/:id/unenroll', authMiddleware, courseController.unenrollUser.bind(courseController));
+// router.post('/courses/:id/rating', authMiddleware, courseController.addRating.bind(courseController));
+// router.get('/courses/search', authMiddleware, courseController.searchCourses.bind(courseController));
+// router.get('/courses/statistics', authMiddleware, courseController.getStatistics.bind(courseController));
 
 /**
  * Job Routes
  */
 router.post('/jobs', authMiddleware, jobController.createJob.bind(jobController));
-router.get('/jobs/:id', authMiddleware, jobController.getJob.bind(jobController));
+router.get('/jobs', authMiddleware, jobController.getAllJobs.bind(jobController));
+router.get('/jobs/:id', authMiddleware, jobController.getJobById.bind(jobController));
 router.put('/jobs/:id', authMiddleware, jobController.updateJob.bind(jobController));
-router.post('/jobs/:id/activate', authMiddleware, jobController.activateJob.bind(jobController));
-router.post('/jobs/:id/deactivate', authMiddleware, jobController.deactivateJob.bind(jobController));
-router.post('/jobs/:id/fill', authMiddleware, jobController.fillJob.bind(jobController));
-router.get('/jobs/search', authMiddleware, jobController.searchJobs.bind(jobController));
-router.get('/jobs', authMiddleware, jobController.getJobsByCriteria.bind(jobController));
-router.get('/jobs/statistics', authMiddleware, jobController.getStatistics.bind(jobController));
+router.delete('/jobs/:id', authMiddleware, jobController.deleteJob.bind(jobController));
+router.post('/jobs/apply', authMiddleware, jobController.applyForJob.bind(jobController));
+router.get('/jobs/:jobId/applications', authMiddleware, jobController.getApplicationsForJob.bind(jobController));
+router.get('/users/:userId/applications', authMiddleware, jobController.getApplicationsForUser.bind(jobController));
+// router.post('/jobs/:id/activate', authMiddleware, jobController.activateJob.bind(jobController));
+// router.post('/jobs/:id/deactivate', authMiddleware, jobController.deactivateJob.bind(jobController));
+// router.post('/jobs/:id/fill', authMiddleware, jobController.fillJob.bind(jobController));
+// router.get('/jobs/search', authMiddleware, jobController.searchJobs.bind(jobController));
+// router.get('/jobs/statistics', authMiddleware, jobController.getStatistics.bind(jobController));
 
 /**
  * Application Routes
@@ -138,27 +142,30 @@ router.get('/applications/statistics', authMiddleware, applicationController.get
 /**
  * Progress Routes
  */
-router.get('/progress/:courseId', authMiddleware, progressController.getOrCreateProgress.bind(progressController));
-router.post('/progress/:progressId/lessons/:lessonId/start', authMiddleware, progressController.startLesson.bind(progressController));
-router.post('/progress/:progressId/lessons/:lessonId/complete', authMiddleware, progressController.completeLesson.bind(progressController));
-router.post('/progress/:progressId/lessons/:lessonId/time', authMiddleware, progressController.recordTimeSpent.bind(progressController));
-router.post('/progress/:progressId/lessons/:lessonId/quiz', authMiddleware, progressController.submitQuizAttempt.bind(progressController));
-router.post('/progress/:progressId/lessons/:lessonId/note', authMiddleware, progressController.addNote.bind(progressController));
-router.get('/progress/statistics/user', authMiddleware, progressController.getUserStatistics.bind(progressController));
-router.get('/progress/statistics/course/:courseId', authMiddleware, progressController.getCourseStatistics.bind(progressController));
+router.post('/progress', authMiddleware, progressController.updateProgress.bind(progressController));
+router.get('/progress/:userId/:courseId', authMiddleware, progressController.getProgressForCourse.bind(progressController));
+router.get('/progress/:userId', authMiddleware, progressController.getProgressForUser.bind(progressController));
+router.get('/progress/:userId/:courseId/completion', authMiddleware, progressController.getCourseCompletion.bind(progressController));
+// router.post('/progress/:progressId/lessons/:lessonId/start', authMiddleware, progressController.startLesson.bind(progressController));
+// router.post('/progress/:progressId/lessons/:lessonId/complete', authMiddleware, progressController.completeLesson.bind(progressController));
+// router.post('/progress/:progressId/lessons/:lessonId/time', authMiddleware, progressController.recordTimeSpent.bind(progressController));
+// router.post('/progress/:progressId/lessons/:lessonId/quiz', authMiddleware, progressController.submitQuizAttempt.bind(progressController));
+// router.post('/progress/:progressId/lessons/:lessonId/note', authMiddleware, progressController.addNote.bind(progressController));
+// router.get('/progress/statistics/user', authMiddleware, progressController.getUserStatistics.bind(progressController));
+// router.get('/progress/statistics/course/:courseId', authMiddleware, progressController.getCourseStatistics.bind(progressController));
 
 /**
  * Message Routes
  */
 router.post('/messages', authMiddleware, messageController.sendMessage.bind(messageController));
-router.get('/messages/conversation/:conversationId', authMiddleware, messageController.getMessagesForConversation.bind(messageController));
-router.post('/messages/:id/read', authMiddleware, messageController.markAsRead.bind(messageController));
-router.post('/messages/read', authMiddleware, messageController.markMultipleAsRead.bind(messageController));
-router.post('/messages/:id/reactions', authMiddleware, messageController.addReaction.bind(messageController));
-router.delete('/messages/:id/reactions', authMiddleware, messageController.removeReaction.bind(messageController));
-router.get('/messages/search', authMiddleware, messageController.searchMessages.bind(messageController));
-router.get('/messages/unread', authMiddleware, messageController.getUnreadMessages.bind(messageController));
-router.get('/messages/statistics', authMiddleware, messageController.getStatistics.bind(messageController));
+router.get('/messages/:userId1/:userId2', authMiddleware, messageController.getMessagesBetweenUsers.bind(messageController));
+router.put('/messages/:id/read', authMiddleware, messageController.markAsRead.bind(messageController));
+router.get('/users/:userId/messages/unread', authMiddleware, messageController.getUnreadMessages.bind(messageController));
+// router.post('/messages/read', authMiddleware, messageController.markMultipleAsRead.bind(messageController));
+// router.post('/messages/:id/reactions', authMiddleware, messageController.addReaction.bind(messageController));
+// router.delete('/messages/:id/reactions', authMiddleware, messageController.removeReaction.bind(messageController));
+// router.get('/messages/search', authMiddleware, messageController.searchMessages.bind(messageController));
+// router.get('/messages/statistics', authMiddleware, messageController.getStatistics.bind(messageController));
 
 /**
  * Conversation Routes
@@ -180,8 +187,8 @@ router.get('/conversations/statistics', authMiddleware, conversationController.g
  */
 router.get('/admin/users/statistics', authMiddleware, adminMiddleware, userController.getStatistics.bind(userController));
 router.get('/admin/youth/statistics', authMiddleware, adminMiddleware, youthController.getStatistics.bind(youthController));
-router.get('/admin/courses/statistics', authMiddleware, adminMiddleware, courseController.getStatistics.bind(courseController));
-router.get('/admin/jobs/statistics', authMiddleware, adminMiddleware, jobController.getStatistics.bind(jobController));
+// router.get('/admin/courses/statistics', authMiddleware, adminMiddleware, courseController.getStatistics.bind(courseController));
+// router.get('/admin/jobs/statistics', authMiddleware, adminMiddleware, jobController.getStatistics.bind(jobController));
 router.get('/admin/applications/statistics', authMiddleware, adminMiddleware, applicationController.getStatistics.bind(applicationController));
 
 /**

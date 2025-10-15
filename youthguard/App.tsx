@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
@@ -8,6 +7,10 @@ import DashboardPage from './pages/DashboardPage';
 import CoursesPage from './pages/CoursesPage';
 import JobsPage from './pages/JobsPage';
 import ProfilePage from './pages/ProfilePage';
+import CourseDetailsPage from './pages/CourseDetailsPage';
+import JobDetailsPage from './pages/JobDetailsPage';
+import MessagesPage from './pages/MessagesPage';
+import ProgressPage from './pages/ProgressPage';
 import Layout from './components/Layout';
 
 const ProtectedRoute: React.FC = () => {
@@ -41,7 +44,11 @@ function App() {
           <Route element={<Layout><ProtectedRoute /></Layout>}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:id" element={<CourseDetailsPage />} />
             <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs/:id" element={<JobDetailsPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/progress" element={<ProgressPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             {/* Add other protected routes here */}
           </Route>

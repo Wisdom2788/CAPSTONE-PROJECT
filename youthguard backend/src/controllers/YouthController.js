@@ -26,8 +26,8 @@ class YouthController extends BaseController {
     /**
      * Constructor
      */
-    constructor() {
-        super(new YouthService());
+    constructor(youthService) {
+        super(youthService);
     }
     
     /**

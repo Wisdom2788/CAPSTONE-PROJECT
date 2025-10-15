@@ -55,3 +55,26 @@ export interface Job {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Lesson {
+  _id: string;
+  title: string;
+  description: string;
+  content: string;
+  videoUrl?: string;
+  duration: number; // in minutes
+  order: number;
+  courseId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Message {
+  _id: string;
+  content: string;
+  senderId: string;
+  receiverId: string;
+  read: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -8,11 +8,8 @@
 const SimpleUserService = require('../services/SimpleUserService');
 
 class SimpleUserController {
-    constructor() {
-        console.log('SimpleUserController constructor called');
-        // Initialize the service directly
-        this.userService = new SimpleUserService();
-        console.log('SimpleUserService initialized:', !!this.userService);
+    constructor(userService) {
+        this.userService = userService;
     }
 
     /**
@@ -21,8 +18,6 @@ class SimpleUserController {
      * @param {Object} res - Express response object
      */
     async register(req, res) {
-        console.log('Register method called');
-        console.log('UserService available:', !!this.userService);
         try {
             const user = await this.userService.register(req.body);
             
@@ -116,8 +111,4 @@ class SimpleUserController {
     }
 }
 
-// Export an instance instead of the class
-console.log('Creating SimpleUserController instance');
-const controllerInstance = new SimpleUserController();
-console.log('Controller instance created:', !!controllerInstance);
-module.exports = controllerInstance;
+module.exports = SimpleUserController;

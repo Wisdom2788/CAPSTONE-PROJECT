@@ -55,8 +55,8 @@ class UserService extends BaseService {
                 ...userDTO.toRegistration(),
                 password: hashedPassword,
                 account: {
-                    status: 'pending_verification',
-                    isEmailVerified: false,
+                    status: 'active',
+                    isEmailVerified: true,
                     createdAt: new Date()
                 }
             };

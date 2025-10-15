@@ -7,8 +7,8 @@
 const MessageService = require('../services/MessageService');
 
 class MessageController {
-    constructor() {
-        this.messageService = new MessageService();
+    constructor(messageService) {
+        this.messageService = messageService;
     }
 
     /**
@@ -103,4 +103,4 @@ class MessageController {
     }
 }
 
-module.exports = new MessageController();
+module.exports = MessageController;

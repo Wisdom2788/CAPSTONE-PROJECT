@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { UserIcon, LogoutIcon } from './icons';
+import { UserIcon, LogoutIcon, MessageIcon } from './icons';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -33,10 +32,17 @@ const Header: React.FC = () => {
               <NavLink to="/" className={navLinkClass} end>Dashboard</NavLink>
               <NavLink to="/courses" className={navLinkClass}>Courses</NavLink>
               <NavLink to="/jobs" className={navLinkClass}>Job Board</NavLink>
+              <NavLink to="/progress" className={navLinkClass}>Progress</NavLink>
             </nav>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm font-medium text-text-primary">
+            <NavLink to="/messages" className="relative p-2 text-text-secondary hover:text-primary">
+              <MessageIcon className="h-5 w-5" />
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
+                3
+              </span>
+            </NavLink>
+            <span className="text-sm font-medium text-text-primary hidden md:inline">
               Welcome, {user?.firstName}
             </span>
             <div className="relative group">

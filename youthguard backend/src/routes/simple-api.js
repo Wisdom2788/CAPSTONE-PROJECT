@@ -7,12 +7,33 @@
 const express = require('express');
 const router = express.Router();
 
-// Import simplified controllers (already instantiated)
-const userController = require('../controllers/SimpleUserController');
-const courseController = require('../controllers/CourseController');
-const jobController = require('../controllers/JobController');
-const messageController = require('../controllers/MessageController');
-const progressController = require('../controllers/ProgressController');
+// Import Services
+const SimpleUserService = require('../services/SimpleUserService');
+const CourseService = require('../services/CourseService');
+const JobService = require('../services/JobService');
+const MessageService = require('../services/MessageService');
+const ProgressService = require('../services/ProgressService');
+
+// Import Controllers
+const SimpleUserController = require('../controllers/SimpleUserController');
+const CourseController = require('../controllers/CourseController');
+const JobController = require('../controllers/JobController');
+const MessageController = require('../controllers/MessageController');
+const ProgressController = require('../controllers/ProgressController');
+
+// Instantiate Services
+const simpleUserService = new SimpleUserService();
+const courseService = new CourseService();
+const jobService = new JobService();
+const messageService = new MessageService();
+const progressService = new ProgressService();
+
+// Instantiate Controllers
+const userController = new SimpleUserController(simpleUserService);
+const courseController = new CourseController(courseService);
+const jobController = new JobController(jobService);
+const messageController = new MessageController(messageService);
+const progressController = new ProgressController(progressService);
 
 /**
  * Authentication Routes

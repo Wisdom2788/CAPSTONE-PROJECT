@@ -7,8 +7,8 @@
 const CourseService = require('../services/CourseService');
 
 class CourseController {
-    constructor() {
-        this.courseService = new CourseService();
+    constructor(courseService) {
+        this.courseService = courseService;
     }
 
     /**
@@ -170,4 +170,4 @@ class CourseController {
     }
 }
 
-module.exports = new CourseController();
+module.exports = CourseController;

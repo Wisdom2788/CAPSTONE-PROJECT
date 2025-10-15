@@ -7,8 +7,8 @@
 const JobService = require('../services/JobService');
 
 class JobController {
-    constructor() {
-        this.jobService = new JobService();
+    constructor(jobService) {
+        this.jobService = jobService;
     }
 
     /**
@@ -192,4 +192,4 @@ class JobController {
     }
 }
 
-module.exports = new JobController();
+module.exports = JobController;

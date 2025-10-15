@@ -7,8 +7,8 @@
 const ProgressService = require('../services/ProgressService');
 
 class ProgressController {
-    constructor() {
-        this.progressService = new ProgressService();
+    constructor(progressService) {
+        this.progressService = progressService;
     }
 
     /**
@@ -103,4 +103,4 @@ class ProgressController {
     }
 }
 
-module.exports = new ProgressController();
+module.exports = ProgressController;

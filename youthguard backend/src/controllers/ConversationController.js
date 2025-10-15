@@ -26,8 +26,8 @@ class ConversationController extends BaseController {
     /**
      * Constructor
      */
-    constructor() {
-        super(new ConversationService());
+    constructor(conversationService) {
+        super(conversationService);
     }
     
     /**
