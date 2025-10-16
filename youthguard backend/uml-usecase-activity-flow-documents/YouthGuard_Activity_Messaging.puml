@@ -1,3 +1,44 @@
+@startuml
+title YouthGuard Platform - Messaging Flow
+
+start
+:User navigates to Messages section;
+:System retrieves user conversations;
+:Display conversation list;
+
+if (User selects existing conversation?) then (yes)
+  :Load conversation messages;
+  :Display message history;
+else (no)
+  if (User starts new conversation?) then (yes)
+    :Show new message form;
+    :User selects recipient;
+    :User composes message;
+  endif
+endif
+
+:User types message;
+:User sends message;
+
+if (Validation successful?) then (yes)
+  :System saves message to database;
+  :Deliver message to recipient;
+  :Update conversation list;
+  :Show message in chat view;
+  
+  if (Recipient online?) then (yes)
+    :Push real-time notification;
+  else (no)
+    :Store message for later delivery;
+    :Send email notification;
+  endif
+else (no)
+  :Display error message;
+  :User retries sending;
+endif
+
+stop
+@enduml
 @startuml YouthGuard_Activity_Messaging
 !theme plain
 title YouthGuard MVP - Messaging System Activity Diagram

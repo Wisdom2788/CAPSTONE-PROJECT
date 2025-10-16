@@ -57,6 +57,15 @@ export const getCourses = () =>
 export const getCourseById = (id: string) => 
   api.get(`/courses/${id}`);
 
+export const createCourse = (courseData: Partial<Course>) => 
+  api.post('/courses', courseData);
+
+export const updateCourse = (id: string, courseData: Partial<Course>) => 
+  api.put(`/courses/${id}`, courseData);
+
+export const deleteCourse = (id: string) => 
+  api.delete(`/courses/${id}`);
+
 export const getLessonsForCourse = (courseId: string) => 
   api.get(`/courses/${courseId}/lessons`);
 
@@ -66,6 +75,15 @@ export const getJobs = () =>
 
 export const getJobById = (id: string) => 
   api.get(`/jobs/${id}`);
+
+export const createJob = (jobData: Partial<Job>) => 
+  api.post('/jobs', jobData);
+
+export const updateJob = (id: string, jobData: Partial<Job>) => 
+  api.put(`/jobs/${id}`, jobData);
+
+export const deleteJob = (id: string) => 
+  api.delete(`/jobs/${id}`);
 
 export const applyForJob = (applicationData: any) => 
   api.post('/jobs/apply', applicationData);

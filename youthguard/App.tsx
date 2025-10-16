@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './contexts/AuthContext';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import { ThemeProvider } from './contexts/ThemeContext';
+import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import CoursesPage from './pages/CoursesPage';
 import JobsPage from './pages/JobsPage';
@@ -11,51 +11,83 @@ import CourseDetailsPage from './pages/CourseDetailsPage';
 import JobDetailsPage from './pages/JobDetailsPage';
 import MessagesPage from './pages/MessagesPage';
 import ProgressPage from './pages/ProgressPage';
+import CourseEditPage from './pages/CourseEditPage';
+import JobEditPage from './pages/JobEditPage';
 import Layout from './components/Layout';
+import DashboardLayout from './components/DashboardLayout';
+import AuthModal from './components/AuthModal';
+
+// Simple layout without sidebar for landing page
+const SimpleLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="min-h-screen flex flex-col bg-background">
+      {children}
+    </div>
+  );
+};
 
 const ProtectedRoute: React.FC = () => {
   const authContext = useContext(AuthContext);
   if (!authContext) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   const { isAuthenticated } = authContext;
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };
 
-const AuthRedirect: React.FC = () => {
-    const authContext = useContext(AuthContext);
-    if (!authContext) {
-      return <Outlet />;
-    }
-    const { isAuthenticated } = authContext;
-    return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
-}
-
 function App() {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authView, setAuthView] = useState<'login' | 'register'>('login');
+
+  const openAuthModal = (view: 'login' | 'register') => {
+    setAuthView(view);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
   return (
     <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route element={<AuthRedirect />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
+      <ThemeProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={
+              <SimpleLayout>
+                <LandingPage openAuthModal={openAuthModal} />
+              </SimpleLayout>
+            } />
           
           <Route element={<Layout><ProtectedRoute /></Layout>}>
-            <Route path="/" element={<DashboardPage />} />
             <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/new" element={<CourseEditPage />} />
             <Route path="/courses/:id" element={<CourseDetailsPage />} />
+            <Route path="/courses/:id/edit" element={<CourseEditPage />} />
             <Route path="/jobs" element={<JobsPage />} />
+            <Route path="/jobs/new" element={<JobEditPage />} />
             <Route path="/jobs/:id" element={<JobDetailsPage />} />
+            <Route path="/jobs/:id/edit" element={<JobEditPage />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             {/* Add other protected routes here */}
           </Route>
           
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* Dashboard route with its own layout */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardLayout><DashboardPage /></DashboardLayout>} />
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
+        <AuthModal 
+          isOpen={isAuthModalOpen} 
+          onClose={closeAuthModal} 
+          initialView={authView} 
+        />
       </HashRouter>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

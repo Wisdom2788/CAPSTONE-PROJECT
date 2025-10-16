@@ -1,3 +1,42 @@
+@startuml
+title YouthGuard Platform - Job Application Flow
+
+start
+:User navigates to Job Board;
+:System retrieves all active jobs;
+:Display jobs in list view;
+
+if (User searches/filters jobs?) then (yes)
+  :Apply search/filter criteria;
+  :Update job listings;
+endif
+
+:User selects a job;
+:System retrieves job details;
+:Display job information\n(title, company, description, requirements);
+
+if (User applies for job?) then (yes)
+  :Show application form;
+  :User fills application details\n(cover letter, resume URL);
+  :User submits application;
+  
+  if (Validation successful?) then (yes)
+    :System creates application record;
+    :Send notification to employer;
+    :Display success message;
+    :Update user's application history;
+  else (no)
+    :Display validation errors;
+    :User corrects errors;
+    :Resubmit application;
+  endif
+else (no)
+  :User continues browsing;
+endif
+
+stop
+@enduml
+```
 @startuml YouthGuard_Activity_JobApplication
 !theme plain
 title YouthGuard MVP - Job Application Process Activity Diagram

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { getUserProgress, getCourseProgress, getCourseCompletion } from '../services/api';
 import { Course } from '../types';
 
 const ProgressPage: React.FC = () => {
@@ -106,51 +105,51 @@ const ProgressPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="loading-spinner"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-md p-4">
+      <div className="bg-red-50 border border-red-200 rounded-md p-4 slide-in-right">
         <p className="text-sm text-red-700">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold font-heading text-text-primary">
+    <div className="space-y-6 sm:space-y-8 fade-in">
+      <div className="slide-up">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading text-text-primary">
           Learning Progress
         </h1>
-        <p className="mt-1 text-text-secondary">
+        <p className="mt-1 sm:mt-2 text-text-secondary text-base sm:text-lg">
           Track your progress and continue your learning journey.
         </p>
       </div>
 
       {/* Overall Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-text-primary">Courses Enrolled</h3>
-          <p className="text-3xl font-bold text-primary mt-2">{courses.length}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 slide-up animation-delay-100">
+        <div className="card p-4 sm:p-6 text-center hover-lift">
+          <h3 className="text-base sm:text-lg font-semibold text-text-primary">Courses Enrolled</h3>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mt-1 sm:mt-2">3</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-text-primary">In Progress</h3>
-          <p className="text-3xl font-bold text-yellow-500 mt-2">
+        <div className="card p-4 sm:p-6 text-center hover-lift">
+          <h3 className="text-base sm:text-lg font-semibold text-text-primary">In Progress</h3>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-500 mt-1 sm:mt-2">
             {progressData.filter(p => p.progress > 0 && p.progress < 100).length}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-text-primary">Completed</h3>
-          <p className="text-3xl font-bold text-green-500 mt-2">
+        <div className="card p-4 sm:p-6 text-center hover-lift">
+          <h3 className="text-base sm:text-lg font-semibold text-text-primary">Completed</h3>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-500 mt-1 sm:mt-2">
             {progressData.filter(p => p.progress === 100).length}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-text-primary">Avg. Progress</h3>
-          <p className="text-3xl font-bold text-blue-500 mt-2">
+        <div className="card p-4 sm:p-6 text-center hover-lift">
+          <h3 className="text-base sm:text-lg font-semibold text-text-primary">Avg. Progress</h3>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-500 mt-1 sm:mt-2">
             {progressData.length 
               ? Math.round(progressData.reduce((sum, p) => sum + p.progress, 0) / progressData.length) 
               : 0}%
@@ -159,41 +158,41 @@ const ProgressPage: React.FC = () => {
       </div>
 
       {/* Progress by Course */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold font-heading text-text-primary mb-6">
+      <div className="card p-4 sm:p-6 slide-up animation-delay-200">
+        <h2 className="text-xl sm:text-2xl font-bold font-heading text-text-primary mb-4 sm:mb-6">
           Progress by Course
         </h2>
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {progressData.map((progress, index) => (
-            <div key={progress.courseId} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div key={progress.courseId} className="border border-gray-200 rounded-xl p-4 hover-lift bounce-in animation-delay-100">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-text-primary">
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-primary">
                     {progress.courseTitle}
                   </h3>
-                  <p className="text-text-secondary text-sm mt-1">
+                  <p className="text-text-secondary text-xs sm:text-sm mt-1">
                     {progress.lessonsCompleted} of {progress.totalLessons} lessons completed
                   </p>
-                  <p className="text-text-secondary text-sm">
+                  <p className="text-text-secondary text-xs sm:text-sm">
                     Last accessed: {new Date(progress.lastAccessed).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="mt-4 md:mt-0 md:text-right">
-                  <span className="text-lg font-semibold text-text-primary">
+                <div className="mt-3 sm:mt-0 sm:text-right">
+                  <span className="text-xl sm:text-2xl font-bold text-text-primary">
                     {progress.progress}%
                   </span>
                 </div>
               </div>
-              <div className="mt-3">
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="mt-3 sm:mt-4">
+                <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
                   <div 
-                    className={`h-2.5 rounded-full ${getProgressColor(progress.progress)}`} 
+                    className={`h-2 sm:h-3 rounded-full progress-bar ${getProgressColor(progress.progress)}`} 
                     style={{ width: `${progress.progress}%` }}
                   ></div>
                 </div>
               </div>
-              <div className="mt-3">
-                <button className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
+              <div className="mt-3 sm:mt-4">
+                <button className="btn-primary w-full sm:w-auto">
                   Continue Learning
                 </button>
               </div>
@@ -203,37 +202,37 @@ const ProgressPage: React.FC = () => {
       </div>
 
       {/* Achievements */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold font-heading text-text-primary mb-6">
+      <div className="card p-4 sm:p-6 slide-up animation-delay-300">
+        <h2 className="text-xl sm:text-2xl font-bold font-heading text-text-primary mb-4 sm:mb-6">
           Recent Achievements
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="border border-gray-200 rounded-lg p-4 text-center">
-            <div className="mx-auto bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="border border-gray-200 rounded-xl p-4 sm:p-6 text-center hover-lift transition-all duration-300 hover:shadow-md">
+            <div className="mx-auto bg-yellow-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-text-primary mt-2">First Course</h3>
-            <p className="text-text-secondary text-sm mt-1">Completed your first course</p>
+            <h3 className="font-semibold text-text-primary mt-3 sm:mt-4 text-sm sm:text-base">First Course</h3>
+            <p className="text-text-secondary text-xs sm:text-sm mt-1 sm:mt-2">Completed your first course</p>
           </div>
-          <div className="border border-gray-200 rounded-lg p-4 text-center">
-            <div className="mx-auto bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="border border-gray-200 rounded-xl p-4 sm:p-6 text-center hover-lift transition-all duration-300 hover:shadow-md">
+            <div className="mx-auto bg-blue-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-text-primary mt-2">Quick Learner</h3>
-            <p className="text-text-secondary text-sm mt-1">Completed 5 lessons in one day</p>
+            <h3 className="font-semibold text-text-primary mt-3 sm:mt-4 text-sm sm:text-base">Quick Learner</h3>
+            <p className="text-text-secondary text-xs sm:text-sm mt-1 sm:mt-2">Completed 5 lessons in one day</p>
           </div>
-          <div className="border border-gray-200 rounded-lg p-4 text-center">
-            <div className="mx-auto bg-green-100 w-12 h-12 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="border border-gray-200 rounded-xl p-4 sm:p-6 text-center hover-lift transition-all duration-300 hover:shadow-md">
+            <div className="mx-auto bg-green-100 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-text-primary mt-2">Consistency</h3>
-            <p className="text-text-secondary text-sm mt-1">7 days in a row of learning</p>
+            <h3 className="font-semibold text-text-primary mt-3 sm:mt-4 text-sm sm:text-base">Consistency</h3>
+            <p className="text-text-secondary text-xs sm:text-sm mt-1 sm:mt-2">7 days in a row of learning</p>
           </div>
         </div>
       </div>

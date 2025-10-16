@@ -1,0 +1,42 @@
+@startuml
+title YouthGuard Platform - User Registration & Authentication Flow
+
+start
+:User visits YouthGuard platform;
+:Clicks on "Register" button;
+:Enters registration details\n(First Name, Last Name, Email, Password);
+:Submits registration form;
+
+if (Validation successful?) then (yes)
+  :System creates user account;
+  :Sends verification email;
+  :Displays success message\n"Please check your email for verification";
+  
+  :User receives verification email;
+  :Clicks on verification link;
+  if (Verification successful?) then (yes)
+    :Account activated;
+    :User redirected to login page;
+    :User enters email and password;
+    :Submits login form;
+    if (Authentication successful?) then (yes)
+      :System generates JWT token;
+      :User redirected to dashboard;
+      :User session established;
+      stop
+    else (no)
+      :Display error "Invalid credentials";
+      :User can retry or reset password;
+    endif
+  else (no)
+    :Display error "Verification failed";
+    :User can request new verification email;
+  endif
+else (no)
+  :Display validation errors;
+  :User corrects errors;
+  :Resubmits form;
+endif
+
+stop
+@enduml

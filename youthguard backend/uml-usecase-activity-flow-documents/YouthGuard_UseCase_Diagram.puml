@@ -1,4 +1,75 @@
-@startuml YouthGuard_UseCase_Diagram
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor "Youth User" as youth
+actor "Mentor" as mentor
+actor "Employer" as employer
+actor "Admin" as admin
+
+rectangle "YouthGuard Platform" {
+  youth -- (Register Account)
+  youth -- (Login to System)
+  youth -- (View Dashboard)
+  youth -- (Browse Courses)
+  youth -- (Enroll in Course)
+  youth -- (View Course Content)
+  youth -- (Complete Lessons)
+  youth -- (Track Progress)
+  youth -- (Browse Job Board)
+  youth -- (Apply for Jobs)
+  youth -- (View Applications)
+  youth -- (Send Messages)
+  youth -- (View Messages)
+  youth -- (Update Profile)
+  
+  mentor -- (Create Courses)
+  mentor -- (Manage Course Content)
+  mentor -- (View Student Progress)
+  mentor -- (Send Messages)
+  
+  employer -- (Post Jobs)
+  employer -- (Manage Job Postings)
+  employer -- (Review Applications)
+  employer -- (Schedule Interviews)
+  employer -- (Send Messages)
+  
+  admin -- (Manage Users)
+  admin -- (Manage Courses)
+  admin -- (Manage Jobs)
+  admin -- (View System Statistics)
+  admin -- (Generate Reports)
+}
+
+note right of youth
+  Youth users can:
+  - Access educational content
+  - Apply for jobs
+  - Communicate with mentors/employers
+  - Track learning progress
+end note
+
+note right of mentor
+  Mentors can:
+  - Create and manage courses
+  - Interact with students
+  - Monitor student progress
+end note
+
+note right of employer
+  Employers can:
+  - Post job opportunities
+  - Review applications
+  - Communicate with candidates
+end note
+
+note right of admin
+  Admins can:
+  - Oversee entire platform
+  - Manage all users
+  - Generate system reports
+end note
+
+@enduml
 !theme plain
 title YouthGuard MVP - Use Case Diagram
 

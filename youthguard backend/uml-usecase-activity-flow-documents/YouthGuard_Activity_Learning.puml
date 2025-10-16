@@ -1,3 +1,51 @@
+@startuml
+title YouthGuard Platform - Learning Management Flow
+
+start
+:User navigates to Courses section;
+:System retrieves all available courses;
+:Display courses in grid view;
+
+if (User searches/filter courses?) then (yes)
+  :Apply search/filter criteria;
+  :Update course list;
+endif
+
+:User selects a course;
+:System retrieves course details;
+:Display course information\n(title, description, lessons, etc.);
+
+if (User enrolls in course?) then (yes)
+  :System creates enrollment record;
+  :User gains access to course content;
+  
+  :User accesses lessons;
+  while (User interacts with lessons?)
+    if (User starts lesson?) then (yes)
+      :Track lesson start time;
+      :Mark lesson as in-progress;
+    endif
+    
+    if (User completes lesson?) then (yes)
+      :Record completion time;
+      :Update progress tracking;
+      :Mark lesson as completed;
+    endif
+    
+    if (User accesses next lesson?) then (yes)
+      :Load next lesson content;
+    else (no)
+      break
+    endif
+  endwhile
+  
+  :Calculate course completion percentage;
+  :Update user progress dashboard;
+endif
+
+stop
+@enduml
+
 @startuml YouthGuard_Activity_CourseEnrollment
 !theme plain
 title YouthGuard MVP - Course Enrollment & Learning Activity Diagram
