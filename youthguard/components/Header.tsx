@@ -126,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
               <NavLink to="/messages" className="relative p-1 sm:p-2 text-text-secondary hover:text-primary transform transition-all duration-300 hover:scale-110 dark:text-gray-300 dark:hover:text-white">
                 <MessageIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                 <span className="absolute -top-1 -right-1 sm:top-0 sm:right-0 inline-flex items-center justify-center px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full notification-badge">
-                  3
+                  5
                 </span>
               </NavLink>
             </motion.div>
