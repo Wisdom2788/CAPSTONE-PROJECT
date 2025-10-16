@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Transition } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import StatCard from '../components/StatCard';
 import { BookIcon, BriefcaseIcon, MessageIcon } from '../components/icons';
@@ -37,7 +37,7 @@ const DashboardPage: React.FC = () => {
               instructor: 'John Doe',
               duration: 20,
               difficulty: 'Beginner',
-              thumbnail: '',
+              thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
               enrollmentCount: 120,
               rating: 4.5,
               isActive: true,
@@ -53,7 +53,7 @@ const DashboardPage: React.FC = () => {
               instructor: 'Jane Smith',
               duration: 15,
               difficulty: 'Intermediate',
-              thumbnail: '',
+              thumbnail: 'https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
               enrollmentCount: 85,
               rating: 4.8,
               isActive: true,
@@ -175,7 +175,7 @@ const DashboardPage: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         damping: 12,
         stiffness: 200
       }
@@ -214,28 +214,6 @@ const DashboardPage: React.FC = () => {
             >
               Continue your journey to success with our latest courses and job opportunities.
             </motion.p>
-            <motion.div 
-              variants={itemVariants}
-              className="mt-4 flex flex-wrap gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <motion.button 
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(37, 99, 235, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-primary px-6 py-3"
-              >
-                Explore Courses
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-outline px-6 py-3"
-              >
-                View Job Board
-              </motion.button>
-            </motion.div>
           </div>
           <motion.div 
             variants={itemVariants}
@@ -245,32 +223,6 @@ const DashboardPage: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-gray-700 dark:to-gray-800 border-2 border-dashed border-blue-300 dark:border-gray-600 rounded-xl w-full h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
-              <div className="text-center">
-                <motion.div 
-                  className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <svg className="h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z" />
-                  </svg>
-                </motion.div>
-                <motion.h3 
-                  className="text-xl font-bold text-text-primary dark:text-white"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  YouthGuard Dashboard
-                </motion.h3>
-                <motion.p 
-                  className="mt-2 text-text-secondary dark:text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  Your learning journey starts here
-                </motion.p>
-              </div>
             </div>
           </motion.div>
         </div>

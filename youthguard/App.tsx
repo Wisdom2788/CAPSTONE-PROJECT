@@ -31,7 +31,15 @@ const ProtectedRoute: React.FC = () => {
   if (!authContext) {
     return <Navigate to="/" replace />;
   }
-  const { isAuthenticated } = authContext;
+  const { isAuthenticated, authCheckComplete } = authContext;
+  
+  // If we haven't completed the auth check yet, show a loading state or nothing
+  if (!authCheckComplete) {
+    return <div className="flex justify-center items-center h-screen">
+      <div className="loading-spinner"></div>
+    </div>;
+  }
+  
   return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };
 
@@ -59,7 +67,13 @@ function App() {
               </SimpleLayout>
             } />
           
+          {/* Routes with header and footer */}
           <Route element={<Layout><ProtectedRoute /></Layout>}>
+            {/* Add any routes that should keep header and footer here */}
+          </Route>
+          
+          {/* Dashboard routes with only sidebar */}
+          <Route element={<DashboardLayout><ProtectedRoute /></DashboardLayout>}>
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/new" element={<CourseEditPage />} />
             <Route path="/courses/:id" element={<CourseDetailsPage />} />
@@ -71,7 +85,6 @@ function App() {
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            {/* Add other protected routes here */}
           </Route>
           
           {/* Dashboard route with its own layout */}

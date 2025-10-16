@@ -85,6 +85,10 @@ const CourseDetailsPage: React.FC = () => {
             src={course.thumbnail || 'https://images.unsplash.com/photo-1560250099-28533a76c0a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80'} 
             alt={course.title} 
             className="h-48 sm:h-64 w-full object-cover rounded-xl"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://images.unsplash.com/photo-1560250099-28533a76c0a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80';
+            }}
           />
           <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4">
             <span className="px-2 py-1 sm:px-3 sm:py-1 bg-primary text-white text-xs sm:text-sm font-semibold rounded-full">

@@ -19,7 +19,7 @@ const JobCard: React.FC<JobCardProps> = (props) => {
   const { job, onEdit } = props;
   return (
     <motion.div 
-      className="card card-hover p-4 sm:p-6 hover-lift"
+      className="card card-hover p-4 sm:p-6 hover-lift rounded-xl shadow-lg dark:shadow-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
       whileHover={{ y: -5 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
@@ -28,17 +28,17 @@ const JobCard: React.FC<JobCardProps> = (props) => {
           whileHover={{ scale: 1.1 }}
           className="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12 bg-gray-100 rounded-lg flex items-center justify-center transition-all duration-300 dark:bg-gray-700"
         >
-            <BriefcaseIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary"/>
+            <BriefcaseIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary dark:text-blue-400"/>
         </motion.div>
         <div className="flex-grow">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
             <div>
-              <h3 className="text-base sm:text-lg font-bold font-heading text-text-primary">{job.title}</h3>
-              <p className="text-xs sm:text-sm text-text-secondary font-medium">{job.company}</p>
+              <h3 className="text-base sm:text-lg font-bold font-heading text-text-primary dark:text-white">{job.title}</h3>
+              <p className="text-xs sm:text-sm text-text-secondary font-medium dark:text-gray-300">{job.company}</p>
             </div>
             <span className={`mt-1 sm:mt-0 px-2 py-1 sm:px-2.5 sm:py-1 text-xs font-semibold rounded-full ${jobTypeColorMap[job.jobType]}`}>{job.jobType}</span>
           </div>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1 sm:mt-2">{job.location}</p>
+          <p className="text-xs sm:text-sm text-text-secondary mt-1 sm:mt-2 dark:text-gray-300">{job.location}</p>
           <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap gap-1 sm:gap-2">
                 {job.skills.slice(0, 3).map((skill, index) => (

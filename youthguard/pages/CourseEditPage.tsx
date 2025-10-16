@@ -250,6 +250,20 @@ const CourseEditPage: React.FC = () => {
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary transition-all duration-300"
               placeholder="Enter image URL for course thumbnail"
             />
+            {formData.thumbnail && (
+              <div className="mt-3">
+                <p className="text-sm text-text-secondary mb-2">Thumbnail Preview:</p>
+                <img 
+                  src={formData.thumbnail} 
+                  alt="Course thumbnail preview" 
+                  className="h-32 w-full object-cover rounded-lg border border-gray-200"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.unsplash.com/photo-1560250099-28533a76c0a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80';
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
 

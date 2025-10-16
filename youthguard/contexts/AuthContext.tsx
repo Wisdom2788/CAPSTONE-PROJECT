@@ -11,6 +11,7 @@ interface AuthContextType {
   logout: () => void;
   loading: boolean;
   error: string | null;
+  authCheckComplete: boolean; // New property to track if auth check is complete
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,6 +25,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [authCheckComplete, setAuthCheckComplete] = useState<boolean>(false); // New state
 
   // Check for existing token on app start
   useEffect(() => {
@@ -34,6 +36,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
+    
+    // Mark auth check as complete whether we found tokens or not
+    setAuthCheckComplete(true);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -96,6 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    setAuthCheckComplete(true); // Ensure we mark as complete on logout
   };
 
   const value = useMemo(() => ({
@@ -107,7 +113,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     loading,
     error,
-  }), [user, token, loading, error]);
+    authCheckComplete, // Include new property
+  }), [user, token, loading, error, authCheckComplete]);
 
   return (
     <AuthContext.Provider value={value}>

@@ -26,7 +26,7 @@ const DashboardSidebar: React.FC = () => {
   };
 
   const navItems = [
-    { to: '/', icon: <HomeIcon className="h-5 w-5" />, label: 'Dashboard' },
+    { to: '/dashboard', icon: <HomeIcon className="h-5 w-5" />, label: 'Dashboard' },
     { to: '/courses', icon: <BookIcon className="h-5 w-5" />, label: 'Courses' },
     { to: '/jobs', icon: <BriefcaseIcon className="h-5 w-5" />, label: 'Job Board' },
     { to: '/progress', icon: <ChartIcon className="h-5 w-5" />, label: 'Progress' },

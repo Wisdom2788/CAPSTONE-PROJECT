@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Transition } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { BookIcon, BriefcaseIcon, ChartIcon, ShieldCheckIcon, SunIcon, MoonIcon } from '../components/icons';
@@ -33,24 +33,21 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         damping: 12,
         stiffness: 200
       }
     }
   };
 
-  const floatingAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
+  const floatingAnimation: Transition = {
+    duration: 3,
+    repeat: Infinity,
+    ease: "easeInOut"
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <motion.header 
         className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50"
@@ -123,21 +120,38 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
       </motion.header>
 
       {/* Hero Section */}
-      <section className="py-16 sm:py-24 relative overflow-hidden">
+      <section className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="absolute inset-0 z-0">
           <motion.div 
             className="absolute top-20 left-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 dark:bg-blue-900"
-            animate={floatingAnimation}
+            animate={{ 
+              y: [0, -10, 0],
+            }}
+            transition={floatingAnimation}
           />
           <motion.div 
             className="absolute top-40 right-10 w-64 h-64 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 dark:bg-indigo-900"
-            animate={{ ...floatingAnimation, y: [0, 15, 0] }}
-            transition={{ ...floatingAnimation.transition, delay: 0.5 }}
+            animate={{ 
+              y: [0, 15, 0],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5
+            }}
           />
           <motion.div 
             className="absolute bottom-20 left-1/2 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 dark:bg-purple-900"
-            animate={{ ...floatingAnimation, y: [0, -15, 0] }}
-            transition={{ ...floatingAnimation.transition, delay: 1 }}
+            animate={{ 
+              y: [0, -15, 0],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
           />
         </div>
         
@@ -149,7 +163,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
             variants={containerVariants}
           >
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 dark:text-white"
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6"
               variants={itemVariants}
             >
               Empowering Youth for the
@@ -164,16 +178,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
               </motion.span>
             </motion.h1>
             <motion.p 
-              className="mt-6 max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300"
+              className="mt-6 max-w-2xl mx-auto text-xl text-gray-300"
               variants={itemVariants}
-              transition={{ delay: 0.2 }}
             >
               YouthGuard provides comprehensive learning paths, career opportunities, and mentorship to help young people succeed in the tech industry.
             </motion.p>
             <motion.div 
               className="mt-10 flex flex-col sm:flex-row justify-center gap-4"
               variants={itemVariants}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4 } as Transition}
             >
               <motion.button 
                 onClick={() => openAuthModal('register')}
@@ -192,10 +205,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
               </motion.button>
               <motion.button 
                 onClick={() => openAuthModal('login')}
-                className="px-8 py-4 text-base font-medium text-gray-700 bg-white hover:bg-gray-50 rounded-lg shadow-lg transition-all duration-300 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700"
+                className="px-8 py-4 text-base font-medium text-white bg-gray-800 hover:bg-gray-700 rounded-lg shadow-lg transition-all duration-300 border border-gray-700"
                 whileHover={{ 
                   scale: 1.05, 
-                  boxShadow: "0 20px 25px rgba(0, 0, 0, 0.1)",
+                  boxShadow: "0 20px 25px rgba(0, 0, 0, 0.3)",
                   y: -5
                 }}
                 whileTap={{ scale: 0.95 }}
@@ -254,7 +267,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
                   boxShadow: "0 20px 25px rgba(0, 0, 0, 0.1)",
                   scale: 1.02
                 }}
-                transition={{ type: "spring", damping: 12, stiffness: 200 }}
+                transition={{ type: "spring", damping: 12, stiffness: 200 } as Transition}
               >
                 <motion.div 
                   className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center dark:bg-blue-900"
@@ -265,14 +278,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
                 <motion.h3 
                   className="mt-6 text-xl font-bold text-gray-900 dark:text-white"
                   initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 }}
                 >
                   {feature.title}
                 </motion.h3>
                 <motion.p 
                   className="mt-2 text-gray-600 dark:text-gray-300"
                   initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
                   {feature.description}
                 </motion.p>
@@ -324,7 +339,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
                   y: -10, 
                   boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
                 }}
-                transition={{ type: "spring", damping: 12, stiffness: 200 }}
+                transition={{ type: "spring", damping: 12, stiffness: 200 } as Transition}
               >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gray-200 rounded-full dark:bg-gray-700"></div>
@@ -380,14 +395,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
             <motion.p 
               className="mt-4 max-w-2xl mx-auto text-xl text-blue-100"
               variants={itemVariants}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2 } as Transition}
             >
               Join thousands of young professionals who have advanced their careers with YouthGuard.
             </motion.p>
             <motion.div 
               className="mt-10"
               variants={itemVariants}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4 } as Transition}
             >
               <motion.button 
                 onClick={() => openAuthModal('register')}
@@ -442,7 +457,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
             <motion.div 
               className="animate-fade-in-up animation-delay-200"
               variants={itemVariants}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2 } as Transition}
             >
               <h3 className="text-lg font-semibold">Platform</h3>
               <ul className="mt-4 space-y-2">
@@ -454,7 +469,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
             <motion.div 
               className="animate-fade-in-up animation-delay-400"
               variants={itemVariants}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4 } as Transition}
             >
               <h3 className="text-lg font-semibold">Resources</h3>
               <ul className="mt-4 space-y-2">
@@ -466,7 +481,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ openAuthModal }) => {
             <motion.div 
               className="animate-fade-in-up animation-delay-600"
               variants={itemVariants}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.6 } as Transition}
             >
               <h3 className="text-lg font-semibold">Company</h3>
               <ul className="mt-4 space-y-2">
