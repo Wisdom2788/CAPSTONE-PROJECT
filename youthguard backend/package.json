@@ -2,10 +2,10 @@
   "name": "youthguard-backend",
   "version": "1.0.0",
   "description": "YouthGuard MVP Backend API - Reducing youth involvement in fraud and cybercrime in Nigeria",
-  "main": "src/server.js",
+  "main": "src/simple-server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/simple-server.js",
+    "dev": "nodemon src/simple-server.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

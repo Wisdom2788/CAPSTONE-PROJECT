@@ -123,51 +123,7 @@ class CourseController {
         }
     }
 
-    /**
-     * Add lesson to course
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     */
-    async addLesson(req, res) {
-        try {
-            const { courseId } = req.params;
-            const lesson = await this.courseService.addLesson(courseId, req.body);
-            
-            res.status(201).json({
-                success: true,
-                message: 'Lesson added successfully',
-                data: lesson
-            });
-        } catch (error) {
-            res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
-    }
 
-    /**
-     * Get lessons for course
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
-     */
-    async getLessonsForCourse(req, res) {
-        try {
-            const { courseId } = req.params;
-            const lessons = await this.courseService.getLessonsForCourse(courseId);
-            
-            res.status(200).json({
-                success: true,
-                message: 'Lessons retrieved successfully',
-                data: lessons
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: error.message
-            });
-        }
-    }
 }
 
 module.exports = CourseController;

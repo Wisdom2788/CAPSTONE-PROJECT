@@ -55,8 +55,6 @@ router.get('/courses', courseController.getAllCourses.bind(courseController));
 router.get('/courses/:id', courseController.getCourseById.bind(courseController));
 router.put('/courses/:id', courseController.updateCourse.bind(courseController));
 router.delete('/courses/:id', courseController.deleteCourse.bind(courseController));
-router.post('/courses/:courseId/lessons', courseController.addLesson.bind(courseController));
-router.get('/courses/:courseId/lessons', courseController.getLessonsForCourse.bind(courseController));
 
 /**
  * Job Routes

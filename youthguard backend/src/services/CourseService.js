@@ -5,7 +5,6 @@
  */
 
 const Course = require('../models/Course');
-const Lesson = require('../models/Lesson');
 
 class CourseService {
     /**
@@ -100,47 +99,7 @@ class CourseService {
         }
     }
 
-    /**
-     * Add lesson to course
-     * @param {String} courseId - Course ID
-     * @param {Object} lessonData - Lesson data
-     * @returns {Promise<Object>} Created lesson
-     */
-    async addLesson(courseId, lessonData) {
-        try {
-            // Verify course exists
-            const course = await Course.findById(courseId);
-            if (!course) {
-                throw new Error('Course not found');
-            }
 
-            // Create lesson
-            const lesson = new Lesson({
-                courseId,
-                ...lessonData
-            });
-            
-            const savedLesson = await lesson.save();
-            
-            return savedLesson;
-        } catch (error) {
-            throw new Error(`Failed to add lesson: ${error.message}`);
-        }
-    }
-
-    /**
-     * Get lessons for course
-     * @param {String} courseId - Course ID
-     * @returns {Promise<Array>} List of lessons
-     */
-    async getLessonsForCourse(courseId) {
-        try {
-            const lessons = await Lesson.find({ courseId }).sort({ orderIndex: 1 });
-            return lessons;
-        } catch (error) {
-            throw new Error(`Failed to fetch lessons: ${error.message}`);
-        }
-    }
 }
 
 module.exports = CourseService;

@@ -20,7 +20,6 @@ const helmet = require('helmet');
 // Import models to ensure they're registered with Mongoose
 require('./models/SimpleUser');
 require('./models/Course');
-require('./models/Lesson');
 require('./models/Job');
 require('./models/Application');
 require('./models/Message');
