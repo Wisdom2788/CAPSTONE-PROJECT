@@ -19,11 +19,7 @@ const progressSchema = new mongoose.Schema({
         required: true
     },
     
-    lessonId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Lesson',
-        required: true
-    },
+
     
     completionStatus: {
         type: String,

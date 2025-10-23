@@ -135,73 +135,7 @@ class ProgressRepository extends BaseRepository {
         }
     }
     
-    /**
-     * Start a lesson for a user
-     * @param {String} progressId - Progress ID
-     * @param {String} lessonId - Lesson ID
-     * @returns {Promise<Object|null>} Updated progress or null
-     */
-    async startLesson(progressId, lessonId) {
-        try {
-            const progress = await this.model.findByIdAndUpdate(
-                progressId,
-                {
-                    $push: {
-                        lessons: {
-                            lessonId: lessonId,
-                            status: 'in_progress',
-                            startedAt: new Date()
-                        }
-                    }
-                },
-                { new: true }
-            );
-            return progress;
-        } catch (error) {
-            logger.error('Error starting lesson', { 
-                error: error.message, 
-                progressId,
-                lessonId
-            });
-            throw error;
-        }
-    }
-    
-    /**
-     * Complete a lesson for a user
-     * @param {String} progressId - Progress ID
-     * @param {String} lessonId - Lesson ID
-     * @returns {Promise<Object|null>} Updated progress or null
-     */
-    async completeLesson(progressId, lessonId) {
-        try {
-            const progress = await this.model.findOneAndUpdate(
-                { _id: progressId, 'lessons.lessonId': lessonId },
-                {
-                    $set: {
-                        'lessons.$.status': 'completed',
-                        'lessons.$.completedAt': new Date()
-                    },
-                    $inc: { 'metrics.lessonsCompleted': 1 }
-                },
-                { new: true }
-            );
-            
-            // Update overall progress if found
-            if (progress) {
-                await this.updateProgressPercentage(progress._id);
-            }
-            
-            return progress;
-        } catch (error) {
-            logger.error('Error completing lesson', { 
-                error: error.message, 
-                progressId,
-                lessonId
-            });
-            throw error;
-        }
-    }
+
     
     /**
      * Record time spent on a lesson

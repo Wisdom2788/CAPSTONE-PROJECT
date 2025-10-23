@@ -17,8 +17,7 @@ class ProgressService {
             // Check if progress already exists
             let progress = await Progress.findOne({
                 userId: progressData.userId,
-                courseId: progressData.courseId,
-                lessonId: progressData.lessonId
+                courseId: progressData.courseId
             });
             
             if (progress) {
@@ -62,7 +61,7 @@ class ProgressService {
      */
     async getProgressForUser(userId) {
         try {
-            const progress = await Progress.find({ userId }).populate('courseId', 'title').populate('lessonId', 'title');
+            const progress = await Progress.find({ userId }).populate('courseId', 'title');
             return progress;
         } catch (error) {
             throw new Error(`Failed to fetch user progress: ${error.message}`);
