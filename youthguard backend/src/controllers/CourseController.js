@@ -123,7 +123,51 @@ class CourseController {
         }
     }
 
+    /**
+     * Search courses
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     */
+    async searchCourses(req, res) {
+        try {
+            const { query } = req.params;
+            const courses = await this.courseService.searchCourses(query);
+            
+            res.status(200).json({
+                success: true,
+                message: `Found ${courses.length} courses matching "${query}"`,
+                data: courses
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
 
+    /**
+     * Get limited courses for dashboard
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     */
+    async getLimitedCourses(req, res) {
+        try {
+            const limit = parseInt(req.query.limit) || 5;
+            const courses = await this.courseService.getLimitedCourses(limit);
+            
+            res.status(200).json({
+                success: true,
+                message: `Retrieved ${courses.length} featured courses`,
+                data: courses
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
 }
 
 module.exports = CourseController;

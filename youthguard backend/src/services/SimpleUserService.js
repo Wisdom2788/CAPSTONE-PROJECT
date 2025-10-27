@@ -110,15 +110,26 @@ class SimpleUserService {
             // Remove sensitive fields from update data
             const { password, email, ...updateData } = profileData;
             
+            // Get current user first
+            const currentUser = await SimpleUser.findById(userId);
+            if (!currentUser) {
+                throw new Error('User not found');
+            }
+
+            // Handle location updates properly
+            if (updateData.location) {
+                // Merge with existing location data to avoid validation errors
+                updateData.location = {
+                    ...currentUser.location.toObject(),
+                    ...updateData.location
+                };
+            }
+            
             const user = await SimpleUser.findByIdAndUpdate(
                 userId, 
                 { ...updateData, updatedAt: new Date() },
                 { new: true, runValidators: true }
             );
-
-            if (!user) {
-                throw new Error('User not found');
-            }
             
             return user.toJSON();
         } catch (error) {

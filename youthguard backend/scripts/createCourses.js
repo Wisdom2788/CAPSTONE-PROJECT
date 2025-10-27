@@ -1,88 +1,15 @@
 /**
- * Simple YouthGuard Server - Clean Architecture
- * 
- * This is a simplified version focusing on the core layered architecture:
- * - Controllers: Handle HTTP requests and responses
- * - Services: Contain business logic
- * - Repositories: Handle data access
- * - Models: Define data structures and validation
+ * Bulk Course Creation Script
+ * Creates 20 diverse courses with unique content, images, and data
  */
 
-// Load environment variables silently
-require('dotenv').config({ debug: false });
-
-// Import required modules
-const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
+require('../src/models/Course');
+const Course = mongoose.model('Course');
 
-// Import models to ensure they're registered with Mongoose
-require('./models/SimpleUser');
-require('./models/Course');
-require('./models/Job');
-require('./models/Application');
-require('./models/Message');
-require('./models/Progress');
-require('./models/Enrollment');
-
-// Import simple routes
-const apiRoutes = require('./routes/simple-api');
-
-// Server configuration
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/youthguard_dev';
-
-// Create Express app
-const app = express();
-
-// Middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'OK',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime()
-    });
-});
-
-// Welcome endpoint
-app.get('/', (req, res) => {
-    res.json({
-        message: 'YouthGuard MVP API',
-        description: 'Reducing youth involvement in fraud and cybercrime in Nigeria',
-        version: '1.0.0'
-    });
-});
-
-// API routes
-app.use('/api', apiRoutes);
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: 'Route not found'
-    });
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-    console.error('Error:', err);
-    res.status(500).json({
-        success: false,
-        message: 'Internal server error',
-        error: process.env.NODE_ENV === 'development' ? err.message : undefined
-    });
-});
-
-// Sample courses data
-const sampleCourses = [
+// Sample course data with real images and diverse content
+const coursesData = [
     {
         title: "Web Development Fundamentals",
         description: "Master HTML, CSS, and JavaScript to build modern websites. Learn responsive design, DOM manipulation, and best practices for front-end development.",
@@ -305,49 +232,32 @@ const sampleCourses = [
     }
 ];
 
-// Auto-populate courses if database is empty
-async function initializeCourses() {
+async function createCourses() {
     try {
-        const Course = mongoose.model('Course');
-        const existingCourses = await Course.countDocuments();
-        
-        if (existingCourses === 0) {
-            await Course.insertMany(sampleCourses);
-            console.log(`✅ Initialized ${sampleCourses.length} sample courses`);
-        }
-    } catch (error) {
-        console.error('Error initializing courses:', error.message);
-    }
-}
+        // Connect to MongoDB
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/youthguard_dev');
+        console.log('Connected to MongoDB');
 
-// Database connection and server startup
-async function startServer() {
-    try {
-        await mongoose.connect(MONGODB_URI);
-        
-        // Initialize courses if database is empty
-        await initializeCourses();
+        // Clear existing courses (optional)
+        await Course.deleteMany({});
+        console.log('Cleared existing courses');
 
-        // Start server
-        const server = app.listen(PORT, () => {
-            console.log(`\nyouthguard-backend ready in ${process.uptime().toFixed(0)} ms\n`);
-            console.log(`Local:   http://localhost:${PORT}/`);
-            console.log(`API:     http://localhost:${PORT}/api`);
+        // Create courses
+        const createdCourses = await Course.insertMany(coursesData);
+        console.log(`✅ Successfully created ${createdCourses.length} courses`);
+
+        // Display created courses
+        createdCourses.forEach((course, index) => {
+            console.log(`${index + 1}. ${course.title} - ${course.category} - Rating: ${course.rating}`);
         });
 
-        // Graceful shutdown
-        process.on('SIGINT', async () => {
-            await mongoose.connection.close();
-            server.close(() => {
-                process.exit(0);
-            });
-        });
-
+        await mongoose.connection.close();
+        console.log('Database connection closed');
     } catch (error) {
-        console.error(error.message);
+        console.error('Error creating courses:', error);
         process.exit(1);
     }
 }
 
-// Start the server
-startServer();
+// Run the script
+createCourses();

@@ -65,9 +65,14 @@ class SimpleUserController {
      */
     async getProfile(req, res) {
         try {
-            // In a real app, you would get user ID from JWT token
-            // For simplicity, we'll use a mock user ID
-            const userId = req.headers['user-id'] || 'mock-user-id';
+            const userId = req.headers['user-id'];
+            
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'user-id header is required'
+                });
+            }
             
             const user = await this.userService.findById(userId);
             
@@ -91,9 +96,14 @@ class SimpleUserController {
      */
     async updateProfile(req, res) {
         try {
-            // In a real app, you would get user ID from JWT token
-            // For simplicity, we'll use a mock user ID
-            const userId = req.headers['user-id'] || 'mock-user-id';
+            const userId = req.headers['user-id'];
+            
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'user-id header is required'
+                });
+            }
             
             const user = await this.userService.updateProfile(userId, req.body);
             
